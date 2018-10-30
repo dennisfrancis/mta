@@ -5,6 +5,9 @@ import (
 )
 
 func validateIndex(idx, size int64) error {
+	if size < 0 {
+		return fmt.Errorf("size < 0")
+	}
 	if idx < 0 {
 		return fmt.Errorf("index is negative")
 	}
@@ -16,14 +19,18 @@ func validateIndex(idx, size int64) error {
 
 func validateBeginEndIndices(beg, end, size int64) (err error) {
 	err = nil
-	errStart, errEnd := validateIndex(beg, size), validateIndex(end, size)
+	errStart := validateIndex(beg, size)
 	if errStart != nil {
 		err = errStart
 		return
 	}
+	errEnd := validateIndex(end, size)
 	if errEnd != nil {
 		err = errEnd
 		return
+	}
+	if end < beg {
+		err = fmt.Errorf("end < beg")
 	}
 	return
 }
