@@ -20,13 +20,13 @@ func NewMultiTypeArray(initSize int64, types []SingleTypeArray) (*MultiTypeArray
 func (self *MultiTypeArray) AddType(arr SingleTypeArray) error {
 	typ := arr.Type()
 	if _, present := self.registeredTypes[typ]; present {
-		return fmt.Errorf("SingleTypeArray of Type = %d already registered", typ)
+		return fmt.Errorf("SingleTypeArray of Type = %s already registered", typ)
 	}
 	self.registeredTypes[typ] = arr
 	return nil
 }
 
-func (self *MultiTypeArray) Insert(elements interface{}, typeCode, size, pos int64) error {
+func (self *MultiTypeArray) Insert(elements interface{}, typeCode string, size, pos int64) error {
 	return nil
 }
 

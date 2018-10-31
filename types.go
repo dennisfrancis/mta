@@ -3,7 +3,7 @@ package mta
 type SingleTypeArray interface {
 
 	// Returns type code of the underlying type
-	Type() int64
+	Type() string
 
 	// Returns newly created SingleTypeArray of the same type with "size" number of elements
 	New(size int64) SingleTypeArray
@@ -32,6 +32,6 @@ type blockType struct {
 }
 
 type MultiTypeArray struct {
-	registeredTypes map[int64]SingleTypeArray
+	registeredTypes map[string]SingleTypeArray
 	blocks          []blockType
 }
