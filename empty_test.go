@@ -6,14 +6,14 @@ import (
 
 var emptyArrayGenerator = &emptyTypeArray{}
 
-func Test_Type(t *testing.T) {
+func Test_EmptyType_Type(t *testing.T) {
 	emptyArray := emptyArrayGenerator
 	if emptyArray.Type() != emptyTypeCode {
 		t.Error("Incorrect code returned by Type() : expected = ", emptyTypeCode, " got = ", emptyArray.Type())
 	}
 }
 
-func Test_Size(t *testing.T) {
+func Test_EmptyType_Size(t *testing.T) {
 	size := int64(100000)
 	emptyArray := emptyArrayGenerator.New(size)
 	if emptyArray.Size() != size {
@@ -21,7 +21,7 @@ func Test_Size(t *testing.T) {
 	}
 }
 
-func Test_Insert(t *testing.T) {
+func Test_EmptyType_Insert(t *testing.T) {
 	size := int64(1000)
 	emptyArray := emptyArrayGenerator.New(size)
 
@@ -59,7 +59,7 @@ func Test_Insert(t *testing.T) {
 	}
 }
 
-func Test_Delete(t *testing.T) {
+func Test_EmptyType_Delete(t *testing.T) {
 	size := int64(1000)
 	emptyArray := emptyArrayGenerator.New(size)
 
