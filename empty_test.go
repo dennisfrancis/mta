@@ -97,3 +97,53 @@ func Test_EmptyType_Delete(t *testing.T) {
 		t.Error("Incorrect size after Delete() : expected = ", size-delSize, " got = ", emptyArray.Size())
 	}
 }
+
+func Test_EmptyType_Replace(t *testing.T) {
+
+	size := int64(1000)
+	emptyArray := emptyArrayGenerator.New(size)
+
+	type testCase struct {
+		size   int64
+		pos    int64
+		errMsg string
+	}
+
+	// cases with non-nil error return
+	cases := []testCase{
+		{-10, 100, "Expected error about negative size"},
+		{100, -10, "Expected error about negative pos"},
+		{10, size, "Expected error about out of bounds pos"},
+		{10, size + 500, "Expected error about out of bounds pos"},
+		{10, size - 10 + 1, "Expected error about out of bounds pos"},  // the source slice is bigger than destination slice
+		{100, size - 10 + 1, "Expected error about out of bounds pos"}, // same here
+	}
+
+	for _, cas := range cases {
+		err := emptyArray.Replace(struct{}{}, cas.size, cas.pos)
+		if err == nil {
+			t.Fatal(cas.errMsg)
+		}
+		if emptyArray.Size() != size {
+			t.Fatal("Incorrect size after failed Replace() : expected = ", size, " got = ", emptyArray.Size())
+		}
+	}
+
+	// cases with nil error return
+	cases = []testCase{
+		{10, 0, "Expected nil error"},
+		{50, 100, "Expected nil error"},
+		{size, 0, "Expected nil error"},
+		{10, size - 10, "Expected nil error"},
+	}
+
+	for _, cas := range cases {
+		err := emptyArray.Replace(struct{}{}, cas.size, cas.pos)
+		if err != nil {
+			t.Fatal(cas.errMsg, " but received err = ", err)
+		}
+		if emptyArray.Size() != size {
+			t.Fatal("Incorrect size after successful Replace() : expected = ", size, " got = ", emptyArray.Size())
+		}
+	}
+}
