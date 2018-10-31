@@ -5,47 +5,60 @@ import (
 )
 
 const (
-	EmptyTypeCode int64 = -1
+	emptyTypeCode int64 = -1
 )
 
-type EmptyTypeArray struct {
+type emptyTypeArray struct {
 	size int64
 }
 
-func (self *EmptyTypeArray) Type() int64 {
-	return -1
+func (self *emptyTypeArray) Type() int64 {
+	return emptyTypeCode
 }
 
-func (self *EmptyTypeArray) New(size int64) *EmptyTypeArray {
-	return &EmptyTypeArray{size: size}
+func (self *emptyTypeArray) New(size int64) *emptyTypeArray {
+	return &emptyTypeArray{size: size}
 }
 
-func (self *EmptyTypeArray) Size() int64 {
+func (self *emptyTypeArray) Size() int64 {
 	return self.size
 }
 
 // Not really going to be used, but still has to satisfy SingleTypeArray interface
-func (self *EmptyTypeArray) Insert(elements interface{}, size, pos int64) error {
+func (self *emptyTypeArray) GetSlice(start, end int64) (elements interface{}, err error) {
+
+	err = validateBeginEndIndices(start, end, self.size)
+	elements = nil
+
+	if err != nil {
+		return
+	}
+
+	elements = struct{}{}
+	return
+}
+
+// Not really going to be used, but still has to satisfy SingleTypeArray interface
+func (self *emptyTypeArray) Insert(elements interface{}, size, pos int64) error {
+
 	if size < 0 {
 		return fmt.Errorf("size < 0 passed")
 	}
-	if pos >= self.size {
-		return fmt.Errorf("pos is out of bounds")
+
+	err := validateIndex(pos, self.size)
+	if err != nil {
+		return err
 	}
+
 	self.size += size
 	return nil
 }
 
-func (self *EmptyTypeArray) Delete(start, end int64) error {
-	err1, err2 := validateIndex(start, self.size), validateIndex(end, self.size)
-	if err1 != nil {
-		return err1
-	}
-	if err2 != nil {
-		return err2
-	}
-	if end < start {
-		return fmt.Errorf("end < start passed")
+func (self *emptyTypeArray) Delete(start, end int64) error {
+
+	err := validateBeginEndIndices(start, end, self.size)
+	if err != nil {
+		return err
 	}
 
 	size := end - start + 1
@@ -53,48 +66,22 @@ func (self *EmptyTypeArray) Delete(start, end int64) error {
 	return nil
 }
 
-func (self *EmptyTypeArray) Copy(source SingleTypeArray, srcStart, srcEnd, destStart int64) (extendedSize int64, err error) {
-	extendedSize = 0
-	err = nil
-	if source.Type() != EmptyTypeCode {
-		err = fmt.Errorf("array type mismatch(%d != %d)", source.Type(), EmptyTypeCode)
-		return
-	}
+func (self *emptyTypeArray) Replace(elements interface{}, size, pos int64) error {
 
-	srcSize := source.Size()
-	err = validateBeginEndIndices(srcStart, srcEnd, srcSize)
+	if size < 0 {
+		return fmt.Errorf("size < 0 passed")
+	}
+	err := validateIndex(pos, self.size)
 	if err != nil {
-		return
+		return err
 	}
 
-	// Overwrite/extend at destination
-	copySize := srcEnd - srcStart + 1
-	destEnd := destStart + copySize - 1
-	if destEnd >= self.size {
-		extendedSize = destEnd - self.size + 1
-		self.size += extendedSize
-	}
-
-	return
-}
-
-func (self *EmptyTypeArray) Move(source SingleTypeArray, srcStart, srcEnd, destStart int64) (err error) {
-	err = nil
-	if source.Type() != EmptyTypeCode {
-		err = fmt.Errorf("array type mismatch(%d != %d)", source.Type(), EmptyTypeCode)
-		return
-	}
-
-	srcSize := source.Size()
-	err = validateBeginEndIndices(srcStart, srcEnd, srcSize)
+	endIdx := pos + size - 1
+	err = validateIndex(endIdx, self.size)
 	if err != nil {
-		return
+		return err
 	}
 
-	// Delete from source
-	source.Delete(srcStart, srcEnd)
-	// Insert to destination
-	copySize := srcEnd - srcStart + 1
-	self.size += copySize
-	return
+	// This function is really a no-op for emptyTypeArray
+	return nil
 }

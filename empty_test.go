@@ -4,12 +4,12 @@ import (
 	"testing"
 )
 
-var emptyArrayGenerator = &EmptyTypeArray{}
+var emptyArrayGenerator = &emptyTypeArray{}
 
 func Test_Type(t *testing.T) {
 	emptyArray := emptyArrayGenerator
-	if emptyArray.Type() != EmptyTypeCode {
-		t.Error("Incorrect code returned by Type() : expected = ", EmptyTypeCode, " got = ", emptyArray.Type())
+	if emptyArray.Type() != emptyTypeCode {
+		t.Error("Incorrect code returned by Type() : expected = ", emptyTypeCode, " got = ", emptyArray.Type())
 	}
 }
 
