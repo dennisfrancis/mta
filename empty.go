@@ -5,18 +5,18 @@ import (
 )
 
 const (
-	emptyTypeCode int64 = -1
+	emptyTypeCode string = "emptyType"
 )
 
 type emptyTypeArray struct {
 	size int64
 }
 
-func (self *emptyTypeArray) Type() int64 {
+func (self *emptyTypeArray) Type() string {
 	return emptyTypeCode
 }
 
-func (self *emptyTypeArray) New(size int64) *emptyTypeArray {
+func (self *emptyTypeArray) New(size int64) SingleTypeArray {
 	return &emptyTypeArray{size: size}
 }
 

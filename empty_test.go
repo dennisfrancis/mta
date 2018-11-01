@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-var emptyArrayGenerator = &emptyTypeArray{}
+var emptyArrayGenerator SingleTypeArray = &emptyTypeArray{}
 
 func Test_EmptyType_Type(t *testing.T) {
 	emptyArray := emptyArrayGenerator
