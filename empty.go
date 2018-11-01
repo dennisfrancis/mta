@@ -38,6 +38,16 @@ func (self *emptyTypeArray) GetSlice(start, end int64) (elements interface{}, er
 	return
 }
 
+func (self *emptyTypeArray) Append(elements interface{}, size int64) error {
+
+	if size < 0 {
+		return fmt.Errorf("size < 0 passed")
+	}
+
+	self.size += size
+	return nil
+}
+
 // Not really going to be used, but still has to satisfy SingleTypeArray interface
 func (self *emptyTypeArray) Insert(elements interface{}, size, pos int64) error {
 

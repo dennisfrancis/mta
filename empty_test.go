@@ -21,6 +21,8 @@ func Test_EmptyType_Size(t *testing.T) {
 	}
 }
 
+// TODO: Write test for Append()
+
 func Test_EmptyType_Insert(t *testing.T) {
 	size := int64(1000)
 	emptyArray := emptyArrayGenerator.New(size)
