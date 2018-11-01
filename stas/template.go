@@ -26,12 +26,12 @@ func (self *ElementTypeArray) New(size int64) mta.SingleTypeArray {
 }
 
 func (self *ElementTypeArray) Size() int64 {
-	return len(self.arr)
+	return int64(len(self.arr))
 }
 
 func (self *ElementTypeArray) GetSlice(start, end int64) (elements interface{}, err error) {
 
-	err = validateBeginEndIndices(start, end, self.size)
+	err = validateBeginEndIndices(start, end, int64(len(self.arr)))
 	elements = nil
 
 	if err != nil {
@@ -53,7 +53,7 @@ func (self *ElementTypeArray) Append(elements interface{}, size int64) error {
 		return fmt.Errorf("elements is not of type []ElementType")
 	}
 
-	if len(srcElements) < size {
+	if int64(len(srcElements)) < size {
 		return fmt.Errorf("elements does not have size = %d elements", size)
 	}
 
@@ -67,7 +67,7 @@ func (self *ElementTypeArray) Insert(elements interface{}, size, pos int64) erro
 		return fmt.Errorf("size <= 0")
 	}
 
-	if err := validateIndex(pos, len(self.arr)); err != nil {
+	if err := validateIndex(pos, int64(len(self.arr))); err != nil {
 		return err
 	}
 
@@ -89,12 +89,12 @@ func (self *ElementTypeArray) Insert(elements interface{}, size, pos int64) erro
 
 func (self *ElementTypeArray) Delete(start, end int64) error {
 
-	err := validateBeginEndIndices(start, end, self.size)
+	err := validateBeginEndIndices(start, end, int64(len(self.arr)))
 	if err != nil {
 		return err
 	}
 
-	if end == (len(self.arr) - 1) {
+	if end == int64(len(self.arr)-1) {
 		self.arr = self.arr[:start]
 	} else {
 		self.arr = append(self.arr[:start], self.arr[end+1:]...)
@@ -108,13 +108,13 @@ func (self *ElementTypeArray) Replace(elements interface{}, size, pos int64) err
 	if size < 0 {
 		return fmt.Errorf("size < 0 passed")
 	}
-	err := validateIndex(pos, self.size)
+	err := validateIndex(pos, int64(len(self.arr)))
 	if err != nil {
 		return err
 	}
 
 	endIdx := pos + size - 1
-	err = validateIndex(endIdx, self.size)
+	err = validateIndex(endIdx, int64(len(self.arr)))
 	if err != nil {
 		return err
 	}
@@ -125,7 +125,7 @@ func (self *ElementTypeArray) Replace(elements interface{}, size, pos int64) err
 	}
 
 	for srcIdx, element := range srcElements {
-		self.arr[pos+srcIdx] = element
+		self.arr[pos+int64(srcIdx)] = element
 	}
 
 	return nil
