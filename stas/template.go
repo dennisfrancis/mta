@@ -1,7 +1,7 @@
 package stas
 
-//go:generate go run generate/generate.go -type float64
-//go run generate/generate.go -type Formula -pkgpath github.com/dennisfrancis/sample
+//go:generate go run generator/generator.go -type float64
+//go run generator/generator.go -type Formula -pkgpath github.com/dennisfrancis/sample
 
 import (
 	"fmt"
